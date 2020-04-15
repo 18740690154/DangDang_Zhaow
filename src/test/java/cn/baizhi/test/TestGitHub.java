@@ -11,4 +11,6 @@ public class TestGitHub {
     public void test(){
 
     }
+    @Test
+    public void testDev(){}
 }
