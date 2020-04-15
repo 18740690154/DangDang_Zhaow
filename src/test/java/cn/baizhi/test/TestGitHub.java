@@ -12,6 +12,7 @@ public class TestGitHub {
         int a =10;
         int b =20;
         int c =a+b;
+        System.out.println("b = " + b);
         System.out.println("c = " + c);
     }
     @Test
