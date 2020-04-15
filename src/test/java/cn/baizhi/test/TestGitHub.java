@@ -9,7 +9,10 @@ public class TestGitHub {
 
     @Test
     public void test(){
-
+        int a =10;
+        int b =20;
+        int c =a+b;
+        System.out.println("c = " + c);
     }
     @Test
     public void testDev(){}
