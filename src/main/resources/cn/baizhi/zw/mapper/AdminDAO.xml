@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="cn.baizhi.zw.dao.AdminDAO">
+	
+	<sql id="adminSQL">
+		id,username,password
+	</sql>
+	
+	<!--后台: 通过密码和管理员名查询 -->
+  	<select id="queryAdmin" parameterType="admin" resultType="admin">
+  		select <include refid="adminSQL"/> from d_admin 
+  		where username=#{username}
+  	</select>
+	  
+</mapper>

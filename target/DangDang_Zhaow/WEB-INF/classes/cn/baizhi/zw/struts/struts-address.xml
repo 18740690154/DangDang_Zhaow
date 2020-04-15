@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"  "http://struts.apache.org/dtds/struts-2.3.dtd">
+	
+<struts>		
+	<package name="address" extends="struts-default" namespace="/address">
+		<action name="*" class="cn.baizhi.zw.action.AddressAction" method="{1}"> 
+			<!-- 添加地址 -->
+			<result name="insertAddressSuccess" type="redirectAction" >
+				<param name="namespace">/order</param>
+				<param name="actionName">insertOrder</param>
+			</result>
+			<!-- 通过用户id查询地址 -->
+			<result name="queryAddressesByUserIdSuccess">/front/order/address_form.jsp</result>
+			<!-- 通过地址id查询地址 -->
+			<result name="queryAddressByidSuccess">/front/order/address_form.jsp</result>
+		</action>
+	</package>
+	<include file="cn/baizhi/zw/struts/struts-order.xml"></include>
+	
+</struts>

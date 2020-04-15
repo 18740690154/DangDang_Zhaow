@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="cn.baizhi.zw.dao.ItemDAO">
+	
+	<sql id="itemSQL">
+	 id, book_name, book_src, price,dd_price,count, amount, book_id, order_id
+	</sql>
+	
+	<!-- 前台:添加订单项 -->
+	<insert id="insertItem" parameterType="item">
+		insert into d_item 
+		values(#{id},#{book_name},#{book_src},#{price},#{dd_price},#{count},#{amount},#{book_id},#{order_id})
+	</insert>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"  
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+	
+<struts>	
+	<package name="cart" extends="struts-default" namespace="/cart">
+		<action name="*" class="cn.baizhi.zw.action.ShopCartAction" method="{1}">
+			<!--添加:购物项成功  -->
+			<result name="addSuccess" type="redirect">/front/cart/cart_list.jsp</result>	
+			<!--添加:购物项失败  -->
+			<result name="addError" type="redirect">/front/cart/cart_list.jsp</result>	
+			<!--修改:购买的图书数量成功  -->
+			<result name="updateSuccess">/front/cart/cart_list.jsp</result>
+			<!--修改:购买的图书数量失败 -->
+			<result name="updateError">/front/cart/cart_list.jsp</result>
+			<!--删除:修改购物项的状态 -->
+			<result name="deleteSuccess">/front/cart/cart_list.jsp</result>
+			<!--恢复:修改购物项的状态 -->
+			<result name="regainSuccess">/front/cart/cart_list.jsp</result>				
+		</action>	
+	</package>
+</struts>

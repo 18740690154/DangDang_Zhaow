@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" 
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="category" extends="struts-default" namespace="/category">
+		<interceptors>
+			<!-- 拦截器声明 -->
+			<interceptor name="LoginInterceptor" class="cn.baizhi.zw.interceptor.LoginInterceptor">
+				<!-- 需要拦截的方法 -->
+				<param name="includeMethods">showAll</param>		
+			</interceptor>
+			<!-- 拦截器栈声明 -->
+			<interceptor-stack name="myStack">
+				<!-- struts默认拦截器 -->
+				<interceptor-ref name="defaultStack" />
+				<!-- 自定义拦截器 -->
+				<interceptor-ref name="LoginInterceptor" />		
+			</interceptor-stack>
+		</interceptors>
+		
+		<!-- 配置全局跳转 -->
+			<global-results>
+				<result name="interceptor">/back/logs.jsp</result>
+			</global-results>
+			
+		<action name="*" class="cn.baizhi.zw.action.CategoryAction" method="{1}">
+			<!-- 使用拦截器栈 -->
+			<interceptor-ref name="myStack"></interceptor-ref>
+			<!-- 后台: 展示所有类别 -->
+			<result name="showAllSuccess" >/back/category/show.jsp</result>
+			<!-- 后台:添加类别 -->
+			<result name="insertSuccess" type="redirectAction">showAll</result>
+			<!-- 后台:展示所有一级类别 -->
+			<result name="showByLevelsSuccess">/back/category/add-second.jsp</result>
+			<!-- 后台:展示所有二级类别 -->
+			<result name="queryLevelsSuccess">/back/book/add.jsp</result>
+			<!-- 后台:删除类别 -->
+			<result name="deleteSuccess" type="chain">showAll</result>
+		</action>
+		
+	</package>
+
+</struts>

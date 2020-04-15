@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="cn.baizhi.zw.dao.OrderDAO">
+	<sql id="orderSQL">
+	 id,order_number,order_times,order_state,addr_user,addr_name,total_price,addr_id,user_id 
+	</sql>
+	<!-- 后台:查询所有订单-->
+	<select id="queryAllOrders"  resultType="order">
+		select <include refid="orderSQL"/> from d_order
+	</select>
+	<!--前台: 添加订单 -->
+	<insert id="insertOrder" parameterType="order">
+		insert into d_order 
+		values(#{id},#{order_number},#{order_times},#{order_state},#{addr_user},#{addr_name},#{total_price},#{addr_id},#{user_id})	
+	</insert>  
+
+	<!-- 后台:通过订单id查询订单项的resultMap -->
+		<resultMap type="order" id="queryOrderByOrderIdMap">
+			<id column="o_id" property="id"/>
+			<result column="oorder_number" property="order_number"/>			
+			<result column="oorder_state" property="order_state"/>			
+			<result column="ototal_price" property="total_price"/>		
+			<collection property="items" ofType="item">
+				<id column="i_id" property="id"/>
+				<result column="ibook_name" property="book_name"/>
+				<result column="ibook_src" property="book_src"/>
+				<result column="i_price" property="price"/>
+				<result column="idd_price" property="dd_price"/>
+				<result column="i_count" property="count"/>
+				<result column="i_amount" property="amount"/>
+				<result column="ibook_id" property="book_id"/>
+				<result column="iorder_id" property="order_id"/>
+			</collection>
+		</resultMap>
+	
+	<!-- 后台:通过订单id查询订单 -->
+	<select id="queryOrderByOrderId" parameterType="order" resultMap="queryOrderByOrderIdMap">
+	 	select i.id i_id, i.book_name ibook_name,i.book_src ibook_src,i.price i_price,i.dd_price idd_price,
+	 		   i.count i_count,i.amount i_amount, i.book_id ibook_id,i.order_id iorder_id,
+	 		   o.id o_id, o.order_number oorder_number,o.order_state oorder_state,o.total_price ototal_price 
+		from  d_order o
+		left join  d_item i
+		on o.id = i.order_id 
+		where order_id =#{id}
+	</select>
+
+</mapper>

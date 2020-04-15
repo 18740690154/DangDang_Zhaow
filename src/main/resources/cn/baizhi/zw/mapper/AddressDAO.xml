@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="cn.baizhi.zw.dao.AddressDAO">
+	<sql id="addressSQL">
+		id,name,detail,zip_code,phone,user_id            
+	</sql>
+	<!-- 前台:添加地址 -->
+	<insert id="insertAddress" parameterType="address">
+		insert into d_address 
+		values(#{id},#{name},#{detail},#{zip_code},#{phone},#{user_id})
+	</insert>
+	 <!-- 前台：通过地址id查询地址 -->
+	 <select id="queryAddressByid" resultType="address">
+		 select <include refid="addressSQL"/> from d_address
+		 where id =#{id}
+	 </select>
+	 <!-- 前台：通过用户id查询地址 --> 
+	<select id="queryAddressesByUserId" resultType="address">
+		select <include refid="addressSQL"/> from d_address
+		 where user_id =#{userId}
+	</select>
+	
+	<!-- 前台:修改地址 -->
+	<update id="updateAddress" parameterType="address">
+		update d_address 
+		<set>
+			<if test="name!=null">
+				name=#{name},
+			</if>
+			<if test="detail!=null">
+				detail=#{detail},
+			</if>
+			<if test="zip_code!=null">
+				zip_code=#{zip_code},
+			</if>
+			<if test="phone">
+				phone=#{phone},
+			</if>
+			<if test="user_id!=null">
+				user_id=#{user_id}
+			</if>
+		</set>	
+	where id =#{id}
+	</update>
+</mapper>

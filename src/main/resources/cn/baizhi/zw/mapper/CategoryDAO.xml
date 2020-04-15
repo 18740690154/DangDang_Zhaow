@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="cn.baizhi.zw.dao.CategoryDAO">
+	<!-- 后台:查询所有类别的resultMap -->	
+	<resultMap type="category" id="queryCategoryMap">
+		<id column="f_id" property="id"/>
+		<result column="fcate_name" property="cate_name"/>
+		<result column="f_count" property="count"/>
+		<result column="fparent_id" property="parent_id" />
+		<result column="f_levels" property="levels"/>
+		
+		<association property="category" javaType="category">
+			<id column="s_id" property="id"/>
+			<result column="scate_name" property="cate_name"/>
+			<result column="s_count" property="count"/>
+			<result column="sparent_id" property="parent_id"/>
+			<result column="s_levels" property="levels"/>
+		</association>
+	</resultMap>
+	<!-- 后台: 查询所有类别-->
+	 <select id="queryAll" resultMap="queryCategoryMap">
+	 	select f.id f_id ,f.cate_name fcate_name,f.count f_count,f.parent_id f_parent,f.levels f_levels,
+	 	 	   s.id s_id,s.cate_name scate_name,s.count s_count ,s.parent_id sparent_id,s.levels s_levels
+	 	from d_category f 
+	 	left join d_category s
+	 	on f.parent_id =s.id    
+	 </select>
+	 <!--后台:添加类别  -->
+	 <insert id="insertCategory" parameterType="category" >
+	 	insert into d_category 
+	 	values(#{id},#{cate_name},#{count,jdbcType=INTEGER},#{parent_id,jdbcType=VARCHAR},#{levels})
+	 </insert> 
+	 <!-- 后台:根据级别查询类别 -->
+	 <select id="queryByLevels" resultType="category">
+	 	select id,cate_name,count,parent_id,levels from d_category
+	 	where levels=#{levels}
+	 </select>
+	 <!-- 后台:删除类别 -->
+	 <delete id="deleteCategory" parameterType="category">
+	 	delete from d_category where id =#{id}
+	 </delete>
+	 
+	 <!-- 后台,前台:查询一级类别的二级类别 -->
+	 <select id="queryById" resultType="category">
+	 	select 
+	 	 	id,cate_name,count,parent_id ,levels
+	 		from d_category 
+	 		where parent_id = #{id}
+	  </select>
+	  
+	  <!-- 前台:展示一级类别及其二级类别resultMap -->	
+	<resultMap type="category" id="queryAllCateMap">
+		<id column="f_id" property="id"/>
+		<result column="fcate_name" property="cate_name"/>
+		<result column="f_count" property="count"/>
+		<result column="fparent_id" property="parent_id" />
+		<result column="f_levels" property="levels"/>
+		
+		<collection property="categorys" ofType="category">
+			<id column="s_id" property="id"/>
+			<result column="scate_name" property="cate_name"/>
+			<result column="s_count" property="count"/>
+			<result column="sparent_id" property="parent_id"/>
+			<result column="s_levels" property="levels"/>
+		</collection>
+	</resultMap>
+	  <!-- 前台:展示一级类别及其二级类别 -->
+	  <select id="queryAllCate" resultMap="queryAllCateMap" parameterType="category">
+	  		select f.id f_id ,f.cate_name fcate_name,f.count f_count,f.parent_id f_parent,f.levels f_levels,
+	 	 	   		s.id s_id,s.cate_name scate_name,s.count s_count ,s.parent_id sparent_id,s.levels s_levels
+	 			from d_category f 
+	 		 inner join d_category s
+	 		on f.id =s.parent_id
+	 	</select>
+	 	
+	 	 <!-- 前台:根据id展示一级类别及其二级类别 -->
+	  <select id="queryCate" resultMap="queryAllCateMap" parameterType="category">
+	  		select f.id f_id ,f.cate_name fcate_name,f.count f_count,f.parent_id f_parent,f.levels f_levels,
+	 	 	   		s.id s_id,s.cate_name scate_name,s.count s_count ,s.parent_id sparent_id,s.levels s_levels
+	 			from d_category f 
+	 		 inner join d_category s
+	 		on f.id =s.parent_id
+	 			where f.id=#{id}		
+	 	</select>	
+	 		
+	 	<!-- 前台:根据id查询图书的类别 -->
+		 <select id="queryCateByBookId" parameterType="book" resultMap="queryCategoryMap">
+		 	select f.id f_id ,f.cate_name fcate_name,f.count f_count,f.parent_id f_parent,f.levels f_levels,
+	 	 	  	   s.id s_id,s.cate_name scate_name,s.count s_count ,s.parent_id sparent_id,s.levels s_levels
+	 			from d_category f 
+		 		left join d_category s  on f.id =s.parent_id
+		 		left join d_book b      on s.id = b.cate_id  
+		 	where b.id =#{id}
+		 </select>
+	 	
+</mapper>

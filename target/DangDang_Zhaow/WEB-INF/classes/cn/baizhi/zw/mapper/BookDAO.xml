@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="cn.baizhi.zw.dao.BookDAO">
+	
+	<sql id="bookSQL">
+		 id,book_name,author,price,dd_price,company,publish_time,publish_count,isbn,print_time,
+		 print_count,sale_count,edition,impression,format,paper,pack,page_count,word_count,
+		 stock_count,e_recommend,c_introduction,author_abstract,catalogue,m_comments,src,cate_id
+		 </sql>
+	<!--后台: 查询图书 -->
+	<select id="queryAllBooks" resultType="book" parameterType="book">
+		select <include refid="bookSQL"/> from d_book
+		<where>
+			<if test="id!=null">
+				id=#{id}
+			</if>
+			<if test="book_name!=null">
+				 book_name like '%'||#{book_name}||'%'
+			</if>
+			<if test="author!=null">
+				author like '%'||#{author}||'%'
+			</if>
+			<if test="company!=null">
+				 company like '%'||#{company}||'%'
+			</if>
+		</where>
+	</select>
+	 <!--后台: 添加图书 -->
+	 <insert id="insertBook" parameterType="book">
+	 	insert into d_book 
+	 	values(#{id},#{book_name},#{author},#{price},#{dd_price},#{company},
+	 		  #{publish_time,jdbcType=DATE},
+	 		  #{publish_count,jdbcType=VARCHAR},
+	 		  #{isbn,jdbcType=VARCHAR},
+	 		  #{print_time,jdbcType=DATE},
+	 		  #{print_count,jdbcType=VARCHAR},
+	 		  #{sale_count,jdbcType=INTEGER},
+	 		  #{edition,jdbcType=VARCHAR},
+	 		  #{impression,jdbcType=VARCHAR},
+	 		  #{format,jdbcType=VARCHAR},
+	 		  #{paper,jdbcType=VARCHAR},
+	 		  #{pack,jdbcType=VARCHAR},
+	 		  #{page_count,jdbcType=INTEGER},
+	 		  #{word_count,jdbcType=INTEGER},
+	 		  #{stock_count,jdbcType=INTEGER},
+	 		  #{e_recommend,jdbcType=VARCHAR},
+	 		  #{c_introduction,jdbcType=VARCHAR},
+	 		  #{author_abstract,jdbcType=VARCHAR},
+	 		  #{catalogue,jdbcType=VARCHAR},
+	 		  #{m_comments,jdbcType=VARCHAR},
+	 		  #{src,jdbcType=VARCHAR},
+	 		  #{cate_id,jdbcType=VARCHAR}
+	 		  )
+	 </insert> 
+	 
+	 <!--后台: 修改图书信息 -->
+	 <update id="updateBook" parameterType="book">
+	 	update d_book 
+	 	<set>
+	 		<if test="book_name!=null">
+	 			book_name=#{book_name},
+	 		</if>
+	 		<if test="author!=null">
+	 			author=#{author},	 		
+	 		</if>
+	 		<if test="price!=null">
+	 			price=#{price},
+	 		</if>
+	 		<if test="dd_price!=null">
+	 			dd_price=#{dd_price},
+	 		</if>
+	 		<if test="company!=null">
+	 			company=#{company},
+	 		</if>
+	 		<if test="publish_time!=null">
+	 			publish_time=#{publish_time},
+	 		</if>
+	 		<if test="publish_count!=null">
+	 			publish_count=#{publish_count},
+	 		</if>
+	 		<if test="isbn!=null">
+				isbn=#{isbn},		 		
+	 		</if>
+	 		<if test="print_time!=null">
+	 			print_time=#{print_time},
+	 		</if>
+	 		<if test="print_count!=null">
+	 			print_count=#{print_count},
+	 		</if>
+	 		<if test="sale_count!=null">
+	 			sale_count=#{sale_count},
+	 		</if>
+	 		<if test="edition!=null">
+	 			edition=#{edition},
+	 		</if>
+	 		<if test="impression!=null">
+	 			impression=#{impression},
+	 		</if>
+	 		<if test="format!=null">
+	 			format=#{format},
+	 		</if>
+	 		<if test="paper!=null">
+	 			paper=#{paper},
+	 		</if>
+	 		<if test="pack!=null">
+	 			pack=#{pack},
+	 		</if>
+	 		<if test="page_count!=null">
+	 			page_count=#{page_count},
+	 		</if>
+	 		<if test="word_count!=null">
+	 			word_count=#{word_count},
+	 		</if>
+	 		<if test="stock_count!=null">
+	 			stock_count=#{stock_count},
+	 		</if>
+	 		<if test="e_recommend!=null">
+	 			e_recommend=#{e_recommend},
+	 		</if>
+	 		<if test="c_introduction!=null">
+	 			c_introduction=#{c_introduction},
+	 		</if>
+	 		<if test="author_abstract!=null">
+	 			author_abstract=#{author_abstract},
+	 		</if>
+	 		<if test="catalogue!=null">
+	 			catalogue=#{catalogue},
+	 		</if>
+	 		<if test="m_comments!=null">
+	 			m_comments=#{m_comments},
+	 		</if>
+	 		<if test="src!=null">
+	 			src=#{src},
+	 		</if>
+	 		<if test="cate_id!=null">
+	 			cate_id=#{cate_id}
+	 		</if>
+	 	</set>
+	 	where id = #{id}
+	 </update>
+	 
+	 <!-- 后台:删除图书 -->
+	 	<delete id="deleteBook" parameterType="book">
+	 		delete from d_book where id = #{id}
+	 	</delete>
+	 	
+	 <!-- 后台:查询每个二级类别图书的resultMap -->	
+	 <resultMap type="book" id="bookCategoryMap">
+	 	<id column="b_id" property="id"/>
+	 		<result column="bcate_id" property="cate_id"/>
+	 		<result column="bbook_name" property="book_name"/>
+	 		<result column="b_author" property="author"/>
+	 		<result column="b_price" property="price"/>
+	 		<result column="bdd_price" property="dd_price"/>
+	 		<result column="b_company" property="company"/>
+	 		<result column="bpublish_time" property="publish_time"/>
+	 		<result column="b_src" property="src"/>
+	 		<association property="category" javaType="category">
+	 			<id column="c_id" property="id"/>
+	 			<result column="ccate_name" property="cate_name"/>
+	 	</association>	
+	 </resultMap>	
+	 <!-- 后台，前台:查询每个二级类别的图书 -->
+	 <select id="queryByCate_id" parameterType="category"  resultMap="bookCategoryMap" >
+		select 	b.id b_id ,b.cate_id bcate_id,b.book_name bbook_name,b.author b_author,
+				b.price b_price,b.dd_price bdd_price,b.company b_company,
+				b.publish_time bpublish_time, b.src b_src,                     
+				c.id c_id,c.cate_name ccate_name
+			from d_book  b
+			left join d_category c
+			on b.cate_id = c.id
+		where c.id = #{id}
+	 </select>
+	 
+	 <!-- 前台:根据销量排序后取图书 -->
+	 <select id="queryBooksBySale" resultType="book">
+	 	select <include refid="bookSQL"/>
+	 		from (select <include refid="bookSQL"/> 	
+	 			from d_book
+	 			where sale_count != 0 
+	 			order by sale_count desc)
+	 	where rownum &lt; 5	
+	 </select>
+	 <!-- 前台:随机查询图书-->
+	 <select id="queryBooksRandom" resultType="book">
+	 	select <include refid="bookSQL"/>
+	 		from (select <include refid="bookSQL"/> 
+	 	 		from d_book order by dbms_random.value) 
+	 	where rownum &lt; 3 
+	 </select>
+		
+
+	<!-- 前台:根据销量和上架时间查询图书 -->
+	<select id="queryBooksBySaleAndPTime" resultType="book">
+			select <include refid="bookSQL"/>
+				from (select  <include refid="bookSQL"/>  from 
+					(select <include refid="bookSQL"/>  
+					 from d_book  
+					 where sale_count != 0
+				 	order by sale_count desc)	
+				order by publish_time desc)
+				where rownum &lt; 11 		
+	</select>
+	<!-- 前台:根据上架时间查询图书 --> 
+	<select id="queryBooksByPTime" resultType="book">
+		select  <include refid="bookSQL"/>
+			from (select <include refid="bookSQL"/> 
+				from  d_book order by publish_time desc)	
+			where rownum &lt; 5
+	</select>
+	
+	<!-- 前台:根据类别id查询图书 (分页)-->
+	<select id="queryBooksByCate" resultType="book">
+		select * from 
+			(select rownum r,p.* from 
+				(select  b.* from  d_book b
+				left join  d_category  c
+				on  b.cate_id =c.id
+			where c.parent_id = #{fid}
+			<if test="cid!=null">
+	 			and c.id = #{cid}
+	 		</if>) p
+	 		)
+	 	where r between (#{page}-1)*3+1 and #{page}*3
+	</select>
+	<!-- 前台:根据类别id查询图书的数量 -->
+	<select id="queryCountByCate" resultType="int" >
+		select  count(b.id) from  d_book b
+				left join  d_category  c
+				on  b.cate_id =c.id
+			where c.parent_id = #{fid}
+			<if test="cid!=null">
+	 			and c.id = #{cid}
+	 		</if>
+	
+	</select>	
+</mapper>

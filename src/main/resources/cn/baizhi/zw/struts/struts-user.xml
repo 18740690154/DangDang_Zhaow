@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"  "http://struts.apache.org/dtds/struts-2.3.dtd">
+	
+<struts>	
+	<package name="user" extends="struts-default" namespace="/user">
+		<interceptors>
+			<!-- 拦截器声明 -->
+			<interceptor name="LoginInterceptor" class="cn.baizhi.zw.interceptor.LoginInterceptor">
+				<!-- 需要拦截的方法 -->
+				<param name="includeMethods">showAll</param>		
+			</interceptor>
+			<!-- 拦截器栈声明 -->
+			<interceptor-stack name="myStack">
+				<!-- struts默认拦截器 -->
+				<interceptor-ref name="defaultStack" />
+				<!-- 自定义拦截器 -->
+				<interceptor-ref name="LoginInterceptor" />		
+			</interceptor-stack>
+		</interceptors>
+		<!-- 配置全局跳转 -->
+			<global-results>
+				<result name="interceptor">/back/logs.jsp</result>
+			</global-results>
+		<action name="*" class="cn.baizhi.zw.action.UserAction" method="{1}"> 
+			<!-- 使用拦截器栈 -->
+			<interceptor-ref name="myStack"></interceptor-ref>
+			<!-- 后台:展示所有用户 -->
+			<result name="showAllSuccess">/back/user/show.jsp</result>
+			<!-- 后台:修改用户状态 -->
+			<result name="updateSuccess" type="redirectAction">showAll</result>
+			<!-- 前台:用户注册成功 -->
+			<result name="registSuccess" type="chain">random</result>
+			<!-- 前台:用户注册失败 -->
+			<result name="registError">/front/user/register_form.jsp</result>	
+			<!-- 前台:获取邮箱激活码 -->
+			<result name="randomSuccess">/front/user/verify_form.jsp</result>
+			<!-- 前台:检查成功 -->
+			<result name="checkSuccess">/front/user/register_ok.jsp</result>
+			<!-- 前台:检查失败 -->
+			<result name="checkError" type="chain">random</result>
+			<!-- 前台:登录，邮箱验证 -->
+			<result name="loginVerify" type="chain">random</result>
+			<!-- 前台:登录，跳转查询地址的action -->
+			<result name="loginforce" type="chain">
+				<param name="namespace">/address</param>
+				<param name="actionName">queryAddressesByUserId</param>
+			</result>			
+			<!-- 前台:登录失败 -->
+			<result name="loginError" >/front/user/login_form.jsp</result>
+			<!-- 前台: 登录成功 -->
+			<result name="loginSuccess" type="chain">
+				<param name="namespace">/book</param>
+				<param name="actionName">showHomePage</param>
+			</result>
+			<!--  登录标记验证成功 -->
+			<result name="loginFlagSuccess" type="chain">
+				<param name="namespace">/address</param>
+				<param name="actionName">queryAddressesByUserId</param>
+			</result>
+			<!-- 登录标记验证失败 -->
+			<result name="loginFlagError">/front/user/login_form.jsp</result>
+			<!-- 用户登出 -->	
+			<result name="logoutSuccess" type="redirectAction">
+				<param name="namespace">/book</param>
+				<param name="actionName">showHomePage</param>
+			</result>			
+		</action>
+	</package>
+	
+	<include file="cn/baizhi/zw/struts/struts-book.xml"></include>
+	<include file="cn/baizhi/zw/struts/struts-address.xml"></include>
+</struts>

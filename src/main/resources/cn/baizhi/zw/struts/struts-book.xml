@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>	
+	<package name="book" extends="struts-default" namespace="/book">
+		<interceptors>
+			<!-- 拦截器声明 -->
+			<interceptor name="loginInterceptor" class="cn.baizhi.zw.interceptor.LoginInterceptor">
+				<!-- 需要拦截的方法 -->
+				<param name="includeMethods">showAll</param>		
+			</interceptor>
+			<!-- 拦截器栈声明 -->
+			<interceptor-stack name="myStack">
+				<!-- struts默认拦截器 -->
+				<interceptor-ref name="defaultStack" />
+				<!-- 自定义拦截器 -->
+				<interceptor-ref name="loginInterceptor" />		
+			</interceptor-stack>
+
+		</interceptors>	
+		<!-- 配置全局跳转 -->
+			<global-results>
+				<result name="interceptor">/back/logs.jsp</result>
+			</global-results>
+	
+		<action name="*" class="cn.baizhi.zw.action.BookAction" method="{1}">
+			<!-- 使用拦截器栈 -->
+			<interceptor-ref name="myStack"></interceptor-ref>
+			<!-- 后台:展示所有图书 -->
+			<result name="showAllSuccess">/back/book/show.jsp</result>
+			<!--后台: 添加图书 -->
+			<result name="insertSuccess" type="redirectAction">showAll</result>
+			<param name="saveFile">/image</param>
+			<!-- 后台:展示要修改图书的信息 -->
+			<result name="showUPdateSuccess">/back/book/update.jsp</result>
+			<!-- 后台:修改图书 -->
+			<result name="updateSuccess" type="redirectAction">showAll</result>		
+			<!-- 后台:模糊查询 -->
+			<result name="queryLikeSuccess">/back/book/show.jsp</result>
+			<!-- 后台:删除图书 -->
+			<result name="deleteSuccess" type="redirectAction">showAll</result>
+			<!-- 前台:首页展示 -->
+			<result name="showHomePageSuccess">/front/main/main.jsp</result>
+			<!--前台: 二级页面展示 -->
+			<result name="showCateBookSuccess">/front/main/book_list.jsp</result>
+			<!-- 前台:详请页面展示 -->
+			<result name="showBookDetailsSuccess">/front/main/book_detail.jsp</result>
+		</action>
+	</package>
+</struts>

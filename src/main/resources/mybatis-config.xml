@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd" "mybatis-3-config.dtd" >
+<configuration>
+	<!-- 引入小配置文件 -->
+	<properties resource="cn/baizhi/zw/conf/db.properties"></properties>
+	<!-- 给实体类起别名 -->
+	<typeAliases>
+		<typeAlias type="cn.baizhi.zw.entity.Admin" alias="admin"/> 
+		<typeAlias type="cn.baizhi.zw.entity.Category" alias="category"/>
+		<typeAlias type="cn.baizhi.zw.entity.Book" alias="book"/>
+		<typeAlias type="cn.baizhi.zw.entity.User" alias="user"/>
+		<typeAlias type="cn.baizhi.zw.entity.Order" alias="order"/>
+		<typeAlias type="cn.baizhi.zw.entity.Item" alias="item"/>
+		<typeAlias type="cn.baizhi.zw.entity.Address" alias="address"/>
+	</typeAliases>
+	
+	<!-- 配置连接池，连接数据库 -->
+	<environments default="oracle">
+		<environment id="oracle">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${oracle.driver}"/>
+				<property name="url" value="${oracle.url}"/>
+				<property name="username" value="${oracle.username}"/>
+				<property name="password" value="${oracle.password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<!-- 注册mapper文件 -->
+	<mappers>
+		<mapper resource="cn/baizhi/zw/mapper/AdminDAO.xml" />
+		<mapper resource="cn/baizhi/zw/mapper/CategoryDAO.xml"/>
+		<mapper resource="cn/baizhi/zw/mapper/BookDAO.xml"/>
+		<mapper resource="cn/baizhi/zw/mapper/UserDAO.xml"/>
+		<mapper resource="cn/baizhi/zw/mapper/OrderDAO.xml"/>
+		<mapper resource="cn/baizhi/zw/mapper/ItemDAO.xml"/>
+		<mapper resource="cn/baizhi/zw/mapper/AddressDAO.xml"/>
+	</mappers>
+</configuration>
